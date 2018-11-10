@@ -38,6 +38,16 @@ namespace IOExtensions
             }
         }
 
+        public string GetBytesTransferedFormatted(SuffixStyle suffixStyle, int decimalPlaces)
+        {
+            return Helpers.ToSizeWithSuffix(BytesTransferred, suffixStyle, decimalPlaces);
+        }
+
+        public string GetDataPerSecondFormatted(SuffixStyle suffixStyle, int decimalPlaces)
+        {
+            return string.Format("{0}/sec", Helpers.ToSizeWithSuffix((long)BytesPerSecond, suffixStyle, decimalPlaces));
+        }
+
         public override string ToString()
         {
             return string.Format("Total: {0}, BytesTransferred: {1}, Percentage: {2}", Total, BytesTransferred, Percentage);

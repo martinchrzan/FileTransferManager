@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FileTransferManager</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$Martin Chrzan$</authors>
+    <owners>$Martin Chrzan$</owners>
+    <licenseUrl>https://raw.githubusercontent.com/martinchrzan/FileTransferManager/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/martinchrzan/FileTransferManager</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>The first release of FileTransferManager</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>Copy Move File Directory Progress</tags>
+  </metadata>
+</package>
