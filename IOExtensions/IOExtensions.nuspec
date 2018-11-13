@@ -4,13 +4,13 @@
     <id>FileTransferManager</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>$Martin Chrzan$</authors>
-    <owners>$Martin Chrzan$</owners>
+    <authors>Martin Chrzan</authors>
+    <owners>Martin Chrzan</owners>
     <licenseUrl>https://raw.githubusercontent.com/martinchrzan/FileTransferManager/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/martinchrzan/FileTransferManager</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>The first release of FileTransferManager</releaseNotes>
+    <releaseNotes>Fixed access rights check, added ability to check rights to a directory or a file</releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Copy Move File Directory Progress</tags>
   </metadata>

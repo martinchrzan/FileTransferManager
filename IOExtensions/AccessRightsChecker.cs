@@ -7,25 +7,35 @@ namespace IOExtensions
     public static class AccessRightsChecker
     {
         /// <summary>
-        /// Test a directory for file access permissions
-        /// Taken from https://stackoverflow.com/a/21996345/613299
+        /// Test a directory or file for file access permissions
         /// </summary>
-        /// <param name="directoryPath">Full path to directory </param>
+        /// <param name="itemPath">Full path to file or directory </param>
         /// <param name="accessRight">File System right tested</param>
         /// <returns>State [bool]</returns>
-        public static bool DirectoryHasPermission(string directoryPath, FileSystemRights accessRight)
+        public static bool ItemHasPermision(string itemPath, FileSystemRights accessRight)
         {
-            if (string.IsNullOrEmpty(directoryPath)) return false;
-            if (!Directory.Exists(directoryPath)) return false;
+            if (string.IsNullOrEmpty(itemPath)) return false;
+            var isDir = itemPath.IsDirFile();
+            if (isDir == null) return false;
 
             try
             {
-                var rules = Directory.GetAccessControl(directoryPath).GetAccessRules(true, true, typeof(SecurityIdentifier));
+                AuthorizationRuleCollection rules;
+                if (isDir == true)
+                {
+                    rules = Directory.GetAccessControl(itemPath).GetAccessRules(true, true, typeof(SecurityIdentifier));
+                }
+                else
+                {
+                    rules = File.GetAccessControl(itemPath).GetAccessRules(true, true, typeof(SecurityIdentifier));
+                }
+                
                 var identity = WindowsIdentity.GetCurrent();
+                string userSID = identity.User.Value;
 
                 foreach (FileSystemAccessRule rule in rules)
                 {
-                    if (identity.Groups.Contains(rule.IdentityReference))
+                    if (rule.IdentityReference.ToString() == userSID || identity.Groups.Contains(rule.IdentityReference))
                     {
                         if ((accessRight & rule.FileSystemRights) == accessRight)
                         {
