@@ -51,18 +51,18 @@ namespace IOExtensions
             });
         }
 
-        public static Task<TransferResult> CopyWithProgressAsync(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure)
+        public static Task<TransferResult> CopyWithProgressAsync(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure, bool copyContentOfDirectory = false)
         {
-            return CopyWithProgressAsync(source, destination, progress, continueOnFailure, CancellationToken.None);
+            return CopyWithProgressAsync(source, destination, progress, continueOnFailure, CancellationToken.None, copyContentOfDirectory);
         }
 
-        public static Task<TransferResult> CopyWithProgressAsync(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure, CancellationToken cancellationToken)
+        public static Task<TransferResult> CopyWithProgressAsync(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure, CancellationToken cancellationToken, bool copyContentOfDirectory = false)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return CopyWithProgress(source, destination, progress, continueOnFailure, cancellationToken);
+                    return CopyWithProgress(source, destination, progress, continueOnFailure, cancellationToken, copyContentOfDirectory);
                 }
                 catch
                 {
@@ -72,12 +72,12 @@ namespace IOExtensions
         }
 
 
-        public static TransferResult CopyWithProgress(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure)
+        public static TransferResult CopyWithProgress(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure, bool copyContentOfDirectory = false)
         {
-            return CopyWithProgress(source, destination, progress, continueOnFailure, CancellationToken.None);
+            return CopyWithProgress(source, destination, progress, continueOnFailure, CancellationToken.None, copyContentOfDirectory);
         }
 
-        public static TransferResult CopyWithProgress(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure, CancellationToken cancellationToken)
+        public static TransferResult CopyWithProgress(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure, CancellationToken cancellationToken, bool copyContentOfDirectory = false)
         {
             var isDir = source.IsDirFile();
             if (isDir == null)
@@ -86,7 +86,7 @@ namespace IOExtensions
             }
             else if (isDir == true)
             {
-                return CopyDirectoryWithProgress(source, destination, progress, continueOnFailure, cancellationToken);
+                return CopyDirectoryWithProgress(source, destination, progress, continueOnFailure, cancellationToken, copyContentOfDirectory);
             }
             else
             {
@@ -101,7 +101,7 @@ namespace IOExtensions
             }
         }
 
-        private static TransferResult CopyDirectoryWithProgress(string sourceDirectory, string destinationDirectory, Action<TransferProgress> progress, bool continueOnFailure, CancellationToken cancellationToken)
+        private static TransferResult CopyDirectoryWithProgress(string sourceDirectory, string destinationDirectory, Action<TransferProgress> progress, bool continueOnFailure, CancellationToken cancellationToken, bool copyContentOfDirectory)
         {
             var rootSource = new DirectoryInfo(sourceDirectory.TrimEnd('\\'));
             var rootSourceLength = rootSource.FullName.Length;
@@ -110,8 +110,12 @@ namespace IOExtensions
 
             try
             {
-                var destinationNewRootDir = Directory.CreateDirectory(Path.Combine(destinationDirectory, rootSource.Name));
-
+                var destinationNewRootDir = new DirectoryInfo(destinationDirectory.TrimEnd('\\'));
+                if (!copyContentOfDirectory)
+                {
+                    destinationNewRootDir = Directory.CreateDirectory(Path.Combine(destinationDirectory, rootSource.Name));
+                }
+                
                 foreach (var directory in rootSource.EnumerateDirectories("*", SearchOption.AllDirectories))
                 {
                     if(cancellationToken.IsCancellationRequested)
