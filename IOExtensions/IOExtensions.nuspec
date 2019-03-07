@@ -10,8 +10,8 @@
     <projectUrl>https://github.com/martinchrzan/FileTransferManager</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Fixed access rights check, added ability to check rights to a directory or a file</releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <releaseNotes>Fixed issue with escaping source path, optional parameter to copy content of folder</releaseNotes>
+    <copyright>Copyright 2019</copyright>
     <tags>Copy Move File Directory Progress</tags>
   </metadata>
 </package>
