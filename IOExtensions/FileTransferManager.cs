@@ -103,7 +103,7 @@ namespace IOExtensions
 
         private static TransferResult CopyDirectoryWithProgress(string sourceDirectory, string destinationDirectory, Action<TransferProgress> progress, bool continueOnFailure, CancellationToken cancellationToken)
         {
-            var rootSource = new DirectoryInfo(sourceDirectory);
+            var rootSource = new DirectoryInfo(sourceDirectory.TrimEnd('\\'));
             var rootSourceLength = rootSource.FullName.Length;
             var rootSourceSize = Helpers.DirSize(rootSource);
             long totalTransfered = 0;
