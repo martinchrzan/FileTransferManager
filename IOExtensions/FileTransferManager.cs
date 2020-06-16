@@ -197,7 +197,7 @@ namespace IOExtensions
             
             var ctr = cancellationToken.Register(() => pbCancel = 1);
 
-            var result = NativeMethods.CopyFileEx(sourceFile, newFile, lpProgressRoutine, IntPtr.Zero, ref pbCancel, NativeMethods.CopyFileFlags.COPY_FILE_RESTARTABLE);
+            var result = NativeMethods.CopyFileEx(sourceFile, newFile, lpProgressRoutine, IntPtr.Zero, ref pbCancel, NativeMethods.CopyFileFlags.COPY_FILE_FAIL_IF_EXISTS);
             if(cancellationToken.IsCancellationRequested)
             {
                 return TransferResult.Cancelled;
