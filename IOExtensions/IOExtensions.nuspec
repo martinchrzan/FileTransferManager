@@ -10,8 +10,8 @@
     <projectUrl>https://github.com/martinchrzan/FileTransferManager</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Fixed issue with escaping source path, optional parameter to copy content of folder</releaseNotes>
-    <copyright>Copyright 2019</copyright>
+    <releaseNotes>Using COPY_FILE_FAIL_IF_EXISTS flag to improve transfer performance</releaseNotes>
+    <copyright>Copyright 2019-2020</copyright>
     <tags>Copy Move File Directory Progress</tags>
   </metadata>
 </package>
