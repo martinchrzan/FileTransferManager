@@ -9,7 +9,7 @@ namespace IOExtensions
 
     public static class FileTransferManager
     {
-        public static bool MoveWithProgress(string source, string destination, Action<TransferProgress> progress)
+        public static TransferResult MoveWithProgress(string source, string destination, Action<TransferProgress> progress, CancellationToken cancellationToken)
         {
             var startTimestamp = DateTime.Now;
             NativeMethods.CopyProgressRoutine lpProgressRoutine = (size, transferred, streamSize, bytesTransferred, number, reason, file, destinationFile, data) =>
@@ -24,21 +24,37 @@ namespace IOExtensions
                 };
                 try
                 {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return NativeMethods.CopyProgressResult.PROGRESS_CANCEL;
+                    }
                     progress(fileProgress);
                     return NativeMethods.CopyProgressResult.PROGRESS_CONTINUE;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return NativeMethods.CopyProgressResult.PROGRESS_STOP;
                 }
             };
-            if (!NativeMethods.MoveFileWithProgress(source, destination, lpProgressRoutine, IntPtr.Zero, NativeMethods.MoveFileFlags.MOVE_FILE_REPLACE_EXISTSING | NativeMethods.MoveFileFlags.MOVE_FILE_COPY_ALLOWED | NativeMethods.MoveFileFlags.MOVE_FILE_WRITE_THROUGH))
-                return false;
 
-            return true;
+            if(cancellationToken.IsCancellationRequested)
+            {
+                return TransferResult.Cancelled;
+            }
+
+            if (!NativeMethods.MoveFileWithProgress(source, destination, lpProgressRoutine, IntPtr.Zero, NativeMethods.MoveFileFlags.MOVE_FILE_REPLACE_EXISTSING | NativeMethods.MoveFileFlags.MOVE_FILE_COPY_ALLOWED | NativeMethods.MoveFileFlags.MOVE_FILE_WRITE_THROUGH))
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return TransferResult.Cancelled;
+                }
+                return TransferResult.Failed;
+            }
+
+            return TransferResult.Success;
         }
 
-        public static Task<bool> MoveWithProgressAsync(string source, string destination, Action<TransferProgress> progress)
+        public static Task<TransferResult> MoveWithProgressAsync(string source, string destination, Action<TransferProgress> progress, CancellationToken cancellationToken)
         {
             return Task.Run(() =>
             {
@@ -47,8 +63,8 @@ namespace IOExtensions
                 {
                     destinationPathCorrected = Helpers.CorrectFileDestinationPath(source, destination);
                 }
-                return MoveWithProgress(source, destinationPathCorrected, progress);
-            });
+                return MoveWithProgress(source, destinationPathCorrected, progress, cancellationToken);
+            }, cancellationToken);
         }
 
         public static Task<TransferResult> CopyWithProgressAsync(string source, string destination, Action<TransferProgress> progress, bool continueOnFailure, bool copyContentOfDirectory = false)
@@ -160,7 +176,7 @@ namespace IOExtensions
                     totalTransfered += file.Length;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return TransferResult.Failed;
             }
@@ -171,6 +187,7 @@ namespace IOExtensions
         {
             int pbCancel = 0;
             var startTimestamp = DateTime.Now;
+
             NativeMethods.CopyProgressRoutine lpProgressRoutine = (size, transferred, streamSize, bytesTransferred, number, reason, file, destinationFile, data) =>
             {
                 TransferProgress fileProgress = new TransferProgress(startTimestamp, bytesTransferred)
@@ -182,10 +199,14 @@ namespace IOExtensions
                 };
                 try
                 {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return NativeMethods.CopyProgressResult.PROGRESS_CANCEL;
+                    }
                     progress(fileProgress);
                     return NativeMethods.CopyProgressResult.PROGRESS_CONTINUE;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return NativeMethods.CopyProgressResult.PROGRESS_STOP;
                 }

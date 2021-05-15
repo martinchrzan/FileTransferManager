@@ -114,7 +114,7 @@ namespace IOExtensions
                     size += DirSize(di);
                 }
             }
-            catch (Exception ex)
+            catch
             {
             }
 

@@ -10,8 +10,15 @@
     <projectUrl>https://github.com/martinchrzan/FileTransferManager</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Using COPY_FILE_FAIL_IF_EXISTS flag to improve transfer performance</releaseNotes>
-    <copyright>Copyright 2019-2020</copyright>
+    <releaseNotes>
+	Added cancellation token into MoveWithProgressAsync, fixed cancellation within copy operations. 
+	Signed libraries.
+	Moved to .NET Framework 4.7.2
+	</releaseNotes>
+    <copyright>Martin Chrzan copyright 2019-2021</copyright>
     <tags>Copy Move File Directory Progress</tags>
+	<dependencies>
+      <group targetFramework=".NETFramework4.7.2" />
+    </dependencies>
   </metadata>
 </package>
