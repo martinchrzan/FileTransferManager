@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Martin Chrzan, Daniel Done</Authors>
+    <Company>IOExtensions</Company>
+    <Description>Copy and move files/folders functionality with reporting a progress</Description>
+    <Copyright>Martin Chrzan ©  2019-2021</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
+    <PackageReleaseNotes>Upgraded to .Net 5.0</PackageReleaseNotes>
+    <PackageId>IOExtensions5.0</PackageId>
+    <Version>1.5.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,21 +4,19 @@
     <id>FileTransferManager</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>Martin Chrzan</authors>
-    <owners>Martin Chrzan</owners>
+    <authors>Martin Chrzan, Daniel Done</authors>
+    <owners>Martin Chrzan, Daniel Done  </owners>
     <license type="expression">MIT</license>
-    <projectUrl>https://github.com/martinchrzan/FileTransferManager</projectUrl>
+    <projectUrl>https://github.com/djdd87/FileTransferManager</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-	Added cancellation token into MoveWithProgressAsync, fixed cancellation within copy operations. 
-	Signed libraries.
-	Moved to .NET Framework 4.7.2
+	Moved to .NET 5.0
 	</releaseNotes>
     <copyright>Martin Chrzan copyright 2019-2021</copyright>
     <tags>Copy Move File Directory Progress</tags>
 	<dependencies>
-      <group targetFramework=".NETFramework4.7.2" />
+      <group targetFramework="net5.0" />
     </dependencies>
   </metadata>
 </package>
